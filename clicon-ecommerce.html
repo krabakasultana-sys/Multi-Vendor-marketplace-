@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLICON – Electronics Store</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #1a6ebd;
+    --blue-dark: #155a9a;
+    --orange: #f07c00;
+    --orange-hover: #d96e00;
+    --text: #222;
+    --text-muted: #777;
+    --border: #e2e2e2;
+    --bg: #f4f6f8;
+    --white: #fff;
+    --green: #27ae60;
+    --red: #e74c3c;
+    --star: #f5a623;
+    --dark-footer: #1a1a2e;
+  }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: var(--text); background: var(--bg); font-size: 14px; }
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; font-family: inherit; }
+  img { max-width: 100%; display: block; }
+
+  /* PAGE TOGGLE */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* TOP BAR */
+  .topbar { background: var(--blue-dark); color: #cde; font-size: 12px; padding: 6px 20px; display: flex; justify-content: space-between; align-items: center; }
+  .topbar a { color: #cde; margin-left: 8px; }
+  .topbar a:hover { color: #fff; }
+
+  /* HEADER */
+  header { background: var(--blue); padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .logo { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; display: flex; align-items: center; gap: 6px; min-width: 120px; }
+  .logo span { background: var(--orange); color: #fff; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .search-bar { flex: 1; min-width: 200px; display: flex; border-radius: 4px; overflow: hidden; }
+  .search-bar input { flex: 1; padding: 9px 14px; border: none; font-size: 14px; outline: none; }
+  .search-bar button { background: var(--orange); border: none; color: #fff; padding: 0 18px; font-size: 16px; }
+  .header-icons { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+  .header-icons a { color: #fff; font-size: 20px; position: relative; }
+  .badge { position: absolute; top: -7px; right: -7px; background: var(--orange); color: #fff; border-radius: 50%; width: 17px; height: 17px; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+
+  /* NAV */
+  nav { background: var(--white); border-bottom: 2px solid var(--border); padding: 0 20px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; }
+  .nav-btn { background: var(--blue); color: #fff; border: none; padding: 10px 16px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  .nav-links { display: flex; flex: 1; gap: 4px; flex-wrap: wrap; }
+  .nav-link { padding: 10px 14px; font-size: 13px; color: var(--text); transition: color 0.15s; white-space: nowrap; }
+  .nav-link:hover, .nav-link.active { color: var(--orange); }
+  .nav-phone { margin-left: auto; color: var(--blue); font-weight: 700; font-size: 13px; white-space: nowrap; padding: 10px 0; }
+
+  /* BREADCRUMB */
+  .breadcrumb { padding: 10px 20px; font-size: 12px; color: var(--text-muted); background: var(--white); border-bottom: 1px solid var(--border); }
+  .breadcrumb a { color: var(--blue); }
+  .breadcrumb span { margin: 0 5px; }
+
+  /* FOOTER */
+  footer { background: var(--dark-footer); color: #aaa; padding: 40px 20px 20px; margin-top: 40px; }
+  .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; gap: 30px; max-width: 1100px; margin: 0 auto; }
+  .footer-logo { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .footer-logo span { background: var(--orange); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; }
+  .footer h4 { color: #fff; font-size: 13px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .footer ul { list-style: none; }
+  .footer ul li { margin-bottom: 7px; font-size: 12px; }
+  .footer ul li a { color: #aaa; transition: color 0.15s; }
+  .footer ul li a:hover { color: var(--orange); }
+  .footer-bottom { text-align: center; margin-top: 30px; padding-top: 16px; border-top: 1px solid #333; font-size: 11px; color: #666; }
+  .app-badges { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .app-badge { background: #111; border: 1px solid #333; color: #ccc; padding: 6px 12px; border-radius: 4px; font-size: 11px; display: flex; align-items: center; gap: 6px; }
+  .footer-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .footer-tag { background: #2a2a3e; color: #aaa; padding: 3px 8px; border-radius: 3px; font-size: 11px; }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border: none; border-radius: 4px; font-size: 13px; font-weight: 600; transition: background 0.15s; }
+  .btn-orange { background: var(--orange); color: #fff; }
+  .btn-orange:hover { background: var(--orange-hover); }
+  .btn-blue { background: var(--blue); color: #fff; }
+  .btn-blue:hover { background: var(--blue-dark); }
+  .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-lg { padding: 12px 28px; font-size: 15px; }
+
+  /* STARS */
+  .stars { color: var(--star); font-size: 12px; }
+  .stars small { color: var(--text-muted); margin-left: 3px; }
+
+  /* PRODUCT CARD */
+  .product-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; transition: box-shadow 0.15s; position: relative; }
+  .product-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.12); }
+  .product-card .badge-label { position: absolute; top: 8px; left: 8px; background: var(--orange); color: #fff; padding: 2px 7px; border-radius: 3px; font-size: 11px; font-weight: 700; z-index: 1; }
+  .product-card .badge-new { background: var(--blue); }
+  .product-card .badge-sale { background: var(--red); }
+  .product-card img { width: 100%; height: 140px; object-fit: contain; padding: 12px; background: #f9f9f9; }
+  .product-card .card-body { padding: 10px 12px; }
+  .product-card .card-title { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; line-height: 1.4; height: 34px; overflow: hidden; }
+  .product-card .card-price { font-size: 16px; font-weight: 700; color: var(--blue); margin: 4px 0; }
+  .product-card .card-price .old-price { text-decoration: line-through; color: var(--text-muted); font-size: 12px; margin-left: 5px; font-weight: 400; }
+  .product-card .card-actions { display: flex; gap: 6px; margin-top: 8px; }
+  .product-card .btn-cart { flex: 1; }
+  .product-card .btn-wish { background: var(--bg); border: 1px solid var(--border); padding: 6px 9px; border-radius: 4px; font-size: 14px; }
+  .product-card .btn-wish:hover { color: var(--red); border-color: var(--red); }
+
+  /* PRODUCTS GRID */
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+
+  /* SIDEBAR */
+  .sidebar { width: 200px; min-width: 180px; flex-shrink: 0; }
+  .sidebar-box { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
+  .sidebar-box h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .sidebar-box ul { list-style: none; }
+  .sidebar-box ul li { padding: 5px 0; font-size: 12px; cursor: pointer; display: flex; justify-content: space-between; }
+  .sidebar-box ul li:hover, .sidebar-box ul li.active { color: var(--orange); }
+  .sidebar-box ul li span { color: var(--text-muted); }
+  .price-inputs { display: flex; gap: 6px; margin-top: 8px; }
+  .price-inputs input { width: 100%; padding: 5px 8px; border: 1px solid var(--border); border-radius: 3px; font-size: 12px; }
+  .brand-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; font-size: 12px; cursor: pointer; }
+  .brand-item input[type=checkbox] { accent-color: var(--orange); }
+
+  /* LAYOUT */
+  .main-content { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  .layout-shop { display: flex; gap: 20px; }
+  .shop-main { flex: 1; min-width: 0; }
+  .shop-toolbar { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .toolbar-left { font-size: 12px; color: var(--text-muted); }
+  .toolbar-right { display: flex; gap: 8px; align-items: center; }
+  .toolbar-right select { border: 1px solid var(--border); padding: 5px 10px; border-radius: 3px; font-size: 12px; }
+
+  /* ── PAGE 1: SHOP ── */
+  /* ── PAGE 2: ORDER TRACKING ── */
+  .order-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 24px; max-width: 800px; margin: 20px auto; }
+  .order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .order-id { font-size: 18px; font-weight: 700; }
+  .order-status { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .order-total { font-size: 22px; font-weight: 800; color: var(--blue); }
+  .progress-bar-wrapper { margin: 24px 0; }
+  .progress-steps { display: flex; justify-content: space-between; position: relative; }
+  .progress-steps::before { content: ''; position: absolute; top: 14px; left: 0; right: 0; height: 3px; background: var(--border); z-index: 0; }
+  .progress-fill { position: absolute; top: 14px; left: 0; width: 33%; height: 3px; background: var(--orange); z-index: 1; transition: width 0.4s; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); z-index: 2; }
+  .step-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--border); border: 3px solid var(--white); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+  .step.done .step-dot { background: var(--orange); color: #fff; }
+  .step.active .step-dot { background: var(--blue); color: #fff; box-shadow: 0 0 0 4px rgba(26,110,189,0.2); }
+  .order-activity { margin-top: 20px; }
+  .order-activity h4 { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+  .activity-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .activity-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .activity-icon.green { background: #e8f9f0; color: var(--green); }
+  .activity-icon.blue { background: #e8f0fb; color: var(--blue); }
+  .activity-icon.orange { background: #fff4e8; color: var(--orange); }
+  .activity-text { flex: 1; }
+  .activity-text p { font-size: 13px; font-weight: 500; }
+  .activity-text small { font-size: 11px; color: var(--text-muted); }
+
+  /* ── PAGE 3: COMPARE ── */
+  .compare-table { background: var(--white); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .compare-products { display: grid; grid-template-columns: 180px repeat(3, 1fr); gap: 0; }
+  .compare-products .compare-label { background: var(--bg); padding: 12px 16px; font-size: 12px; font-weight: 700; display: flex; align-items: center; border-bottom: 1px solid var(--border); }
+  .compare-cell { padding: 14px; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); text-align: center; font-size: 12px; }
+  .compare-cell img { height: 100px; object-fit: contain; margin: 0 auto 8px; }
+  .compare-cell .cell-name { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+  .compare-cell .cell-price { font-size: 16px; font-weight: 700; color: var(--blue); }
+  .compare-row-label { background: var(--bg); padding: 12px 16px; font-size: 12px; font-weight: 600; border-bottom: 1px solid var(--border); display: flex; align-items: center; }
+  .highlight { color: var(--green); font-weight: 700; }
+  .lowlight { color: var(--red); font-weight: 700; }
+
+  /* ── PAGE 4: WISHLIST ── */
+  .wishlist-table { width: 100%; background: var(--white); border: 1px solid var(--border); border-radius: 8px; border-collapse: collapse; overflow: hidden; }
+  .wishlist-table th { background: var(--bg); padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); }
+  .wishlist-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+  .wishlist-table tr:last-child td { border-bottom: none; }
+  .wishlist-product { display: flex; align-items: center; gap: 12px; }
+  .wishlist-product img { width: 55px; height: 55px; object-fit: contain; border: 1px solid var(--border); border-radius: 4px; padding: 4px; }
+  .wishlist-product-name { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .price-strike { text-decoration: line-through; color: var(--text-muted); font-size: 12px; }
+  .stock-in { color: var(--green); font-weight: 700; font-size: 12px; }
+  .stock-out { color: var(--red); font-weight: 700; font-size: 12px; }
+  .btn-remove { background: none; border: 1px solid var(--border); padding: 5px 9px; border-radius: 4px; color: var(--text-muted); font-size: 13px; }
+  .btn-remove:hover { color: var(--red); border-color: var(--red); }
+
+  /* ── PAGE 5: CART ── */
+  .cart-layout { display: grid; grid-template-columns: 1fr 280px; gap: 20px; align-items: start; }
+  .cart-table { width: 100%; background: var(--white); border: 1px solid var(--border); border-radius: 8px; border-collapse: collapse; }
+  .cart-table th { background: var(--bg); padding: 12px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); text-align: left; }
+  .cart-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 13px; }
+  .cart-table tr:last-child td { border-bottom: none; }
+  .cart-product { display: flex; align-items: center; gap: 10px; }
+  .cart-product img { width: 55px; height: 55px; object-fit: contain; border: 1px solid var(--border); border-radius: 4px; padding: 4px; }
+  .cart-product-name { font-size: 12px; color: var(--text-muted); }
+  .qty-control { display: flex; align-items: center; gap: 6px; }
+  .qty-control button { background: var(--bg); border: 1px solid var(--border); width: 26px; height: 26px; border-radius: 4px; font-size: 14px; font-weight: 700; }
+  .qty-control input { width: 38px; text-align: center; border: 1px solid var(--border); border-radius: 4px; padding: 4px; font-size: 13px; }
+  .cart-totals { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+  .cart-totals h3 { font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+  .totals-row { display: flex; justify-content: space-between; font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+  .totals-row:last-of-type { border: none; font-weight: 700; font-size: 15px; color: var(--blue); }
+  .coupon-box { margin-top: 16px; }
+  .coupon-box p { font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+  .coupon-box input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; margin-bottom: 8px; }
+  .cart-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+
+  /* ── PAGE 6: CHECKOUT ── */
+  .checkout-layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start; }
+  .checkout-form { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+  .checkout-form h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+  .form-group input, .form-group select, .form-group textarea { padding: 9px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.15s; }
+  .form-group input:focus, .form-group select:focus { border-color: var(--blue); }
+  .payment-options { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 16px; }
+  .pay-option { border: 2px solid var(--border); border-radius: 6px; padding: 10px 14px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; min-width: 64px; transition: border-color 0.15s; }
+  .pay-option:hover { border-color: var(--blue); }
+  .pay-option.selected { border-color: var(--orange); background: #fff8f0; }
+  .pay-option .pay-icon { font-size: 22px; }
+  .order-summary-box { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+  .order-summary-box h3 { font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+  .summary-item { display: flex; gap: 10px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .summary-item img { width: 50px; height: 50px; object-fit: contain; border: 1px solid var(--border); border-radius: 4px; padding: 4px; }
+  .summary-item-info { flex: 1; }
+  .summary-item-info p { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .summary-item-info strong { font-size: 12px; }
+  .summary-totals .totals-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; }
+  .summary-totals .totals-total { font-weight: 700; font-size: 15px; color: var(--blue); border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }
+
+  /* ── PAGE 7: ORDER SUCCESS ── */
+  .success-page { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; }
+  .success-icon { width: 80px; height: 80px; background: #e8f9f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 38px; margin-bottom: 20px; color: var(--green); }
+  .success-page h2 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+  .success-page p { color: var(--text-muted); max-width: 380px; line-height: 1.6; margin-bottom: 24px; font-size: 14px; }
+  .success-actions { display: flex; gap: 12px; }
+
+  /* SECTION HEADING */
+  .section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .section-head h2 { font-size: 17px; font-weight: 700; }
+
+  /* PROMO BANNER */
+  .promo-banner { background: linear-gradient(135deg, #1a1a2e, #2a2a4e); border-radius: 8px; padding: 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; color: #fff; }
+  .promo-banner h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .promo-banner p { font-size: 12px; color: #aaa; margin-bottom: 14px; }
+  .promo-price { font-size: 24px; font-weight: 800; color: var(--orange); }
+  .promo-img { width: 140px; opacity: 0.85; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .layout-shop { flex-direction: column; }
+    .sidebar { width: 100%; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .cart-layout, .checkout-layout { grid-template-columns: 1fr; }
+    .compare-products { grid-template-columns: 120px repeat(3, 1fr); }
+    .form-row.triple { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .topbar { display: none; }
+    header { padding: 10px 12px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr; }
+    .compare-products { grid-template-columns: 90px repeat(3, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-phone { display: none; }
+    .wishlist-table { display: block; overflow-x: auto; }
+    .cart-table { display: block; overflow-x: auto; }
+    .progress-steps { gap: 4px; }
+    .step { font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== TOP BAR ====== -->
+<div class="topbar">
+  <span>Welcome to Clicon eCommerce Store</span>
+  <div>
+    <a href="#">Follow Us</a>
+    <a href="#">🐦</a><a href="#">📘</a><a href="#">📸</a>
+    <a href="#">Eng ▾</a>
+    <a href="#">USD ▾</a>
+  </div>
+</div>
+
+<!-- ====== HEADER ====== -->
+<header>
+  <div class="logo"><span>○</span>CLICON</div>
+  <div class="search-bar">
+    <input type="text" placeholder="Search for anything..." id="searchInput">
+    <button onclick="searchProducts()">🔍</button>
+  </div>
+  <div class="header-icons">
+    <a href="#" onclick="navigate('cart')" title="Cart" style="position:relative">🛒<span class="badge" id="cartBadge">2</span></a>
+    <a href="#" onclick="navigate('wishlist')" title="Wishlist" style="position:relative">♡<span class="badge" id="wishBadge">4</span></a>
+    <a href="#" title="Account">👤</a>
+  </div>
+</header>
+
+<!-- ====== NAV ====== -->
+<nav>
+  <button class="nav-btn" onclick="navigate('shop')">☰ All Category</button>
+  <div class="nav-links">
+    <a class="nav-link" href="#" onclick="navigate('tracking')">📦 Track Order</a>
+    <a class="nav-link" href="#" onclick="navigate('compare')">⇄ Compare</a>
+    <a class="nav-link" href="#" onclick="navigate('wishlist')">♡ Wishlist</a>
+    <a class="nav-link" href="#" onclick="navigate('cart')">🛒 Cart</a>
+    <a class="nav-link" href="#" onclick="navigate('checkout')">✔ Checkout</a>
+    <a class="nav-link" href="#">❓ Need Help</a>
+  </div>
+  <div class="nav-phone">📞 +1-202-555-0104</div>
+</nav>
+
+<!-- ========================================= -->
+<!-- PAGE 1: SHOP / PRODUCT LISTING -->
+<!-- ========================================= -->
+<div class="page active" id="page-shop">
+  <div class="breadcrumb">
+    <a href="#" onclick="navigate('shop')">Home</a><span>›</span>
+    <a href="#">Shop</a><span>›</span>
+    <a href="#">Mobile</a><span>›</span>
+    <span>Electronics Devices</span>
+  </div>
+  <div class="main-content">
+    <div class="layout-shop">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-box">
+          <h3>Category</h3>
+          <ul id="categoryList">
+            <li class="active" onclick="filterCategory(this,'All')"><b>All Electronics</b> <span></span></li>
+            <li onclick="filterCategory(this,'Computer & Laptop')">Computer & Laptop <span>(12)</span></li>
+            <li onclick="filterCategory(this,'Computer Accessories')">Computer Accessories <span>(9)</span></li>
+            <li onclick="filterCategory(this,'SmartPhone')">SmartPhone <span>(14)</span></li>
+            <li onclick="filterCategory(this,'Headphone')">Headphone <span>(7)</span></li>
+            <li onclick="filterCategory(this,'Mobile Accessories')">Mobile Accessories <span>(5)</span></li>
+            <li onclick="filterCategory(this,'Camera & Photo')">Camera & Photo <span>(6)</span></li>
+            <li onclick="filterCategory(this,'TV & Televisions')">TV & Televisions <span>(8)</span></li>
+            <li onclick="filterCategory(this,'Speaker')">Speaker <span>(4)</span></li>
+          </ul>
+        </div>
+        <div class="sidebar-box">
+          <h3>Price Range</h3>
+          <div class="price-inputs">
+            <input type="number" placeholder="Min" id="priceMin" value="0">
+            <input type="number" placeholder="Max" id="priceMax" value="9999">
+          </div>
+          <button class="btn btn-orange btn-sm" style="margin-top:10px;width:100%;" onclick="applyPriceFilter()">Apply</button>
+        </div>
+        <div class="sidebar-box">
+          <h3>Popular Brands</h3>
+          <label class="brand-item"><input type="checkbox" onchange="updateBrandFilter(this)" value="Samsung"> Samsung (8)</label>
+          <label class="brand-item"><input type="checkbox" onchange="updateBrandFilter(this)" value="Apple"> Apple (6)</label>
+          <label class="brand-item"><input type="checkbox" onchange="updateBrandFilter(this)" value="Sony"> Sony (5)</label>
+          <label class="brand-item"><input type="checkbox" onchange="updateBrandFilter(this)" value="HP"> HP (4)</label>
+          <label class="brand-item"><input type="checkbox" onchange="updateBrandFilter(this)" value="Dell"> Dell (3)</label>
+          <label class="brand-item"><input type="checkbox" onchange="updateBrandFilter(this)" value="Jabra"> Jabra (3)</label>
+        </div>
+        <div class="sidebar-box">
+          <h3>Popular Tags</h3>
+          <div class="footer-tags" style="margin:0;">
+            <span class="footer-tag" style="cursor:pointer;background:#eee;color:#444" onclick="filterTag(this,'Game')">Game</span>
+            <span class="footer-tag" style="cursor:pointer;background:#eee;color:#444" onclick="filterTag(this,'iPhone')">iPhone</span>
+            <span class="footer-tag" style="cursor:pointer;background:#eee;color:#444" onclick="filterTag(this,'TV')">TV</span>
+            <span class="footer-tag" style="cursor:pointer;background:#eee;color:#444" onclick="filterTag(this,'Laptop')">Laptop</span>
+            <span class="footer-tag" style="cursor:pointer;background:#eee;color:#444" onclick="filterTag(this,'Watch')">Watch</span>
+            <span class="footer-tag" style="cursor:pointer;background:#eee;color:#444" onclick="filterTag(this,'USB')">USB</span>
+            <span class="footer-tag" style="cursor:pointer;background:#eee;color:#444" onclick="filterTag(this,'SmartPhone')">SmartPhone</span>
+          </div>
+        </div>
+        <div class="promo-banner" style="padding:16px;flex-direction:column;text-align:center;">
+          <h3 style="font-size:13px">⌚ Apple Watch</h3>
+          <p>Heavy on Features.<br>Light on Price.</p>
+          <div class="promo-price">$399</div>
+          <button class="btn btn-orange btn-sm" style="margin-top:10px;" onclick="addToCart('Apple Watch Series 8', 399)">Shop Now →</button>
+        </div>
+      </aside>
+      <!-- MAIN -->
+      <div class="shop-main">
+        <div class="shop-toolbar">
+          <div class="toolbar-left" id="resultCount">Showing 1–24 of 89 results</div>
+          <div class="toolbar-right">
+            <span style="font-size:12px;color:#777">Sort by:</span>
+            <select onchange="sortProducts(this.value)">
+              <option value="popular">Most Popular</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+            </select>
+          </div>
+        </div>
+        <div class="products-grid" id="productsGrid"></div>
+        <!-- PAGINATION -->
+        <div style="display:flex;justify-content:center;gap:6px;margin-top:24px;" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================= -->
+<!-- PAGE 2: TRACK ORDER -->
+<!-- ========================================= -->
+<div class="page" id="page-tracking">
+  <div class="breadcrumb">
+    <a href="#" onclick="navigate('shop')">Home</a><span>›</span>
+    <a href="#">Pages</a><span>›</span>
+    <a href="#">Track Order</a><span>›</span>
+    <span>Details</span>
+  </div>
+  <div class="main-content">
+    <div class="order-card">
+      <div class="order-header">
+        <div>
+          <div class="order-id">#96409701</div>
+          <div class="order-status">4 Products — Order Placed: 02 Jan, 2021 at 5:31 PM</div>
+          <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Order expected arrival: <strong style="color:var(--blue)">03 Jan, 2021</strong></div>
+        </div>
+        <div class="order-total">$1199.00</div>
+      </div>
+      <div class="progress-bar-wrapper">
+        <div class="progress-steps">
+          <div class="progress-fill" id="progressFill"></div>
+          <div class="step done" id="step1">
+            <div class="step-dot">📦</div>
+            <span>Order Placed</span>
+          </div>
+          <div class="step active" id="step2">
+            <div class="step-dot">📬</div>
+            <span>Packaging</span>
+          </div>
+          <div class="step" id="step3">
+            <div class="step-dot">🚗</div>
+            <span>On The Road</span>
+          </div>
+          <div class="step" id="step4">
+            <div class="step-dot">✅</div>
+            <span>Delivered</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin:16px 0;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="advanceOrder()">Advance Order Status ▶</button>
+        <button class="btn btn-outline btn-sm" onclick="resetOrder()">Reset</button>
+      </div>
+      <div class="order-activity">
+        <h4>Order Activity</h4>
+        <div class="activity-item">
+          <div class="activity-icon green">✓</div>
+          <div class="activity-text">
+            <p>Your order has been delivered. Thank you for shopping on Clicon!</p>
+            <small>03 Jan, 2021 at 9:40 AM</small>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon blue">🚗</div>
+          <div class="activity-text">
+            <p>Our Delivery man has picked up your order for delivery.</p>
+            <small>02 Jan, 2021 at 8:30 PM</small>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon orange">📬</div>
+          <div class="activity-text">
+            <p>Your package has been sent to the post.</p>
+            <small>02 Jan, 2021 at 6:30 PM</small>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon blue">📋</div>
+          <div class="activity-text">
+            <p>Your order is successfully confirmed.</p>
+            <small>02 Jan, 2021 at 5:31 PM</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================= -->
+<!-- PAGE 3: COMPARE -->
+<!-- ========================================= -->
+<div class="page" id="page-compare">
+  <div class="breadcrumb">
+    <a href="#" onclick="navigate('shop')">Home</a><span>›</span>
+    <span>Compare</span>
+  </div>
+  <div class="main-content">
+    <div class="section-head">
+      <h2>Product Comparison</h2>
+      <button class="btn btn-outline btn-sm" onclick="clearCompare()">Clear All</button>
+    </div>
+    <div class="compare-table">
+      <div class="compare-products">
+        <div class="compare-label"></div>
+        <div class="compare-cell" id="cp1">
+          <img src="https://via.placeholder.com/120x100?text=Gaming+Combo" alt="">
+          <div class="cell-name">QuadCast HyperX Gaming Keyboard, Mouse & Mouse Pad Combo</div>
+          <div class="cell-price">$595.00</div>
+          <div class="stars" style="margin:6px 0">★★★★☆ <small>(490)</small></div>
+          <button class="btn btn-orange btn-sm" onclick="addToCart('Gaming Combo', 595)">Add to Cart</button>
+        </div>
+        <div class="compare-cell" id="cp2">
+          <img src="https://via.placeholder.com/120x100?text=iMac+24" alt="">
+          <div class="cell-name">Apple iMac 24" M1 Retina Display 8‑Core GPU 256GB SSD, Blue – Most 2021</div>
+          <div class="cell-price">$1,000.00</div>
+          <div class="stars" style="margin:6px 0">★★★★★ <small>(612)</small></div>
+          <button class="btn btn-orange btn-sm" onclick="addToCart('Apple iMac 24', 1000)">Add to Cart</button>
+        </div>
+        <div class="compare-cell" id="cp3">
+          <img src="https://via.placeholder.com/120x100?text=Samsung+S21" alt="">
+          <div class="cell-name">Samsung Galaxy S21 FE 5G Cell Phone, Factory Unlocked Android SmartPhone</div>
+          <div class="cell-price">$589.85</div>
+          <div class="stars" style="margin:6px 0">★★★★☆ <small>(120)</small></div>
+          <button class="btn btn-orange btn-sm" onclick="addToCart('Samsung S21 FE', 590)">Add to Cart</button>
+        </div>
+      </div>
+      <!-- Compare Rows -->
+      <div class="compare-products">
+        <div class="compare-row-label">Customer feedback</div>
+        <div class="compare-cell">★★★★☆ 490 reviews</div>
+        <div class="compare-cell">★★★★★ 612 reviews</div>
+        <div class="compare-cell">★★★★☆ 120 reviews</div>
+      </div>
+      <div class="compare-products">
+        <div class="compare-row-label">Price</div>
+        <div class="compare-cell">$595.00</div>
+        <div class="compare-cell highlight">$1,000.00</div>
+        <div class="compare-cell">$589.85</div>
+      </div>
+      <div class="compare-products">
+        <div class="compare-row-label">Sold by</div>
+        <div class="compare-cell">Clicon</div>
+        <div class="compare-cell">Apple</div>
+        <div class="compare-cell">Clicon</div>
+      </div>
+      <div class="compare-products">
+        <div class="compare-row-label">Brand</div>
+        <div class="compare-cell">HyperX</div>
+        <div class="compare-cell">Apple</div>
+        <div class="compare-cell highlight">Samsung</div>
+      </div>
+      <div class="compare-products">
+        <div class="compare-row-label">Model</div>
+        <div class="compare-cell">HKS-Tech MK245C2</div>
+        <div class="compare-cell">Apple iMac 24" M1 2021</div>
+        <div class="compare-cell">SM-G990E</div>
+      </div>
+      <div class="compare-products">
+        <div class="compare-row-label">Stock status</div>
+        <div class="compare-cell highlight">IN STOCK</div>
+        <div class="compare-cell highlight">IN STOCK</div>
+        <div class="compare-cell lowlight">OUT OF STOCK</div>
+      </div>
+      <div class="compare-products">
+        <div class="compare-row-label">Size</div>
+        <div class="compare-cell">4.7 inches, 122mm</div>
+        <div class="compare-cell">4.5 inches, 108.8 mm</div>
+        <div class="compare-cell">6.4 inches, 98.9 mm</div>
+      </div>
+      <div class="compare-products">
+        <div class="compare-row-label">Weight</div>
+        <div class="compare-cell">440g / 0.97 lb</div>
+        <div class="compare-cell">246g / 0.97 lb</div>
+        <div class="compare-cell highlight">177g / 0.39 lb</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================= -->
+<!-- PAGE 4: WISHLIST -->
+<!-- ========================================= -->
+<div class="page" id="page-wishlist">
+  <div class="breadcrumb">
+    <a href="#" onclick="navigate('shop')">Home</a><span>›</span>
+    <span>Wishlist</span>
+  </div>
+  <div class="main-content">
+    <div class="section-head">
+      <h2>My Wishlist</h2>
+      <button class="btn btn-outline btn-sm" onclick="clearWishlist()">Clear All</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="wishlist-table" id="wishlistTable">
+        <thead>
+          <tr>
+            <th>PRODUCTS</th>
+            <th>PRICE</th>
+            <th>STOCK STATUS</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="wishlistBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================= -->
+<!-- PAGE 5: SHOPPING CART -->
+<!-- ========================================= -->
+<div class="page" id="page-cart">
+  <div class="breadcrumb">
+    <a href="#" onclick="navigate('shop')">Home</a><span>›</span>
+    <span>Shopping Cart</span>
+  </div>
+  <div class="main-content">
+    <div class="section-head"><h2>Shopping Cart</h2></div>
+    <div class="cart-layout">
+      <div>
+        <div style="overflow-x:auto;">
+          <table class="cart-table" id="cartTable">
+            <thead>
+              <tr>
+                <th>PRODUCT</th>
+                <th>PRICE</th>
+                <th>QUANTITY</th>
+                <th>SUBTOTAL</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="cartBody"></tbody>
+          </table>
+        </div>
+        <div class="cart-actions">
+          <button class="btn btn-outline" onclick="navigate('shop')">← Return to Shop</button>
+          <button class="btn btn-outline" onclick="updateCart()">Update Cart</button>
+        </div>
+      </div>
+      <div class="cart-totals">
+        <h3>Cart Totals</h3>
+        <div class="totals-row"><span>Sub Total</span><span id="cartSubtotal">$0.00</span></div>
+        <div class="totals-row"><span>Shipping</span><span style="color:var(--green)">Free</span></div>
+        <div class="totals-row"><span>Discount</span><span id="cartDiscount" style="color:var(--red)">-$0.00</span></div>
+        <div class="totals-row"><span>Tax (5%)</span><span id="cartTax">$0.00</span></div>
+        <div class="totals-row" style="font-weight:700;font-size:15px;color:var(--blue);border-top:2px solid var(--border);padding-top:10px;margin-top:4px;">
+          <span>Total</span><span id="cartTotal">$0.00</span>
+        </div>
+        <button class="btn btn-orange btn-lg" style="width:100%;margin-top:16px;" onclick="navigate('checkout')">Process to Checkout →</button>
+        <div class="coupon-box">
+          <p>Coupon Code</p>
+          <input type="text" id="couponInput" placeholder="Enter code">
+          <button class="btn btn-outline" style="width:100%;" onclick="applyCoupon()">Apply Coupon</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================= -->
+<!-- PAGE 6: CHECKOUT -->
+<!-- ========================================= -->
+<div class="page" id="page-checkout">
+  <div class="breadcrumb">
+    <a href="#" onclick="navigate('shop')">Home</a><span>›</span>
+    <a href="#" onclick="navigate('cart')">Shopping Cart</a><span>›</span>
+    <span>Checkout</span>
+  </div>
+  <div class="main-content">
+    <div class="section-head"><h2>Checkout</h2></div>
+    <div class="checkout-layout">
+      <div class="checkout-form">
+        <h3>Billing Information</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First name</label>
+            <input type="text" placeholder="First name">
+          </div>
+          <div class="form-group">
+            <label>Last name</label>
+            <input type="text" placeholder="Last name">
+          </div>
+        </div>
+        <div class="form-row single">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="your@email.com">
+          </div>
+        </div>
+        <div class="form-row triple">
+          <div class="form-group">
+            <label>Country</label>
+            <select>
+              <option>Select Country</option>
+              <option>United States</option>
+              <option>Bangladesh</option>
+              <option>United Kingdom</option>
+              <option>Canada</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Region/State</label>
+            <select><option>Select</option></select>
+          </div>
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" placeholder="City">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Zip Code</label>
+            <input type="text" placeholder="Zip Code">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="+1 (000)">
+          </div>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:20px;">
+          <input type="checkbox"> Ship to a different address
+        </label>
+
+        <h3>Payment Option</h3>
+        <div class="payment-options" id="paymentOptions">
+          <div class="pay-option selected" onclick="selectPayment(this)"><div class="pay-icon">🚚</div><span>Cash on Delivery</span></div>
+          <div class="pay-option" onclick="selectPayment(this)"><div class="pay-icon">🐦</div><span>Stripe</span></div>
+          <div class="pay-option" onclick="selectPayment(this)"><div class="pay-icon">🅿️</div><span>Paypal</span></div>
+          <div class="pay-option" onclick="selectPayment(this)"><div class="pay-icon">🇬</div><span>Google Pay</span></div>
+          <div class="pay-option" onclick="selectPayment(this)"><div class="pay-icon">💳</div><span>Debit/Credit</span></div>
+        </div>
+        <div id="cardFields" style="display:none;">
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>Card Number</label>
+            <input type="text" placeholder="1234 5678 9012 3456">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Expiry Date</label>
+              <input type="text" placeholder="MM/YY">
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <input type="text" placeholder="CVV">
+            </div>
+          </div>
+        </div>
+        <h3 style="margin-top:16px;">Additional Information</h3>
+        <div class="form-group">
+          <label>Order Notes (optional)</label>
+          <textarea rows="3" placeholder="Notes about your order, e.g. special delivery instructions"></textarea>
+        </div>
+      </div>
+      <div class="order-summary-box">
+        <h3>Order Summary</h3>
+        <div id="checkoutItems"></div>
+        <div class="summary-totals">
+          <div class="totals-row"><span>Sub Total</span><span id="co-subtotal">$0.00</span></div>
+          <div class="totals-row"><span>Shipping</span><span style="color:var(--green)">Free</span></div>
+          <div class="totals-row"><span>Discount</span><span id="co-discount" style="color:var(--red)">-$0.00</span></div>
+          <div class="totals-row"><span>Tax (5%)</span><span id="co-tax">$0.00</span></div>
+          <div class="summary-totals totals-total" style="display:flex;justify-content:space-between;font-weight:700;font-size:15px;color:var(--blue);border-top:1px solid var(--border);padding-top:8px;margin-top:4px;">
+            <span>Total</span><span id="co-total">$0.00</span>
+          </div>
+        </div>
+        <button class="btn btn-orange btn-lg" style="width:100%;margin-top:16px;" onclick="placeOrder()">Place Order →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================= -->
+<!-- PAGE 7: ORDER SUCCESS -->
+<!-- ========================================= -->
+<div class="page" id="page-success">
+  <div class="breadcrumb">
+    <a href="#" onclick="navigate('shop')">Home</a><span>›</span>
+    <a href="#" onclick="navigate('cart')">Shopping Cart</a><span>›</span>
+    <span>Checkout</span>
+  </div>
+  <div class="main-content">
+    <div class="success-page">
+      <div class="success-icon">✓</div>
+      <h2>Your order is successfully placed</h2>
+      <p>Pellentesque sed lectus nec tortor tristique accumsan quis molestie leo. Donec ut libero sed arcu vehicula ultricies a non tortor.</p>
+      <div class="success-actions">
+        <button class="btn btn-outline btn-lg" onclick="navigate('tracking')">Go to Tracking</button>
+        <button class="btn btn-orange btn-lg" onclick="navigate('shop')">View Products →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo"><span>○</span>CLICON</div>
+      <p style="font-size:12px;margin-bottom:8px;">Customer Support:</p>
+      <p style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;">(629) 555-0129</p>
+      <p style="font-size:11px;margin-bottom:4px;">4517 Washington Ave. Manchester, Kentucky 39495</p>
+      <p style="font-size:11px;color:#777;">info@clicon.com</p>
+    </div>
+    <div>
+      <h4>Top Category</h4>
+      <ul>
+        <li><a href="#">Computer & Laptop</a></li>
+        <li><a href="#">SmartPhone</a></li>
+        <li><a href="#">Smart TV</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Camera & Photo</a></li>
+        <li><a href="#">TV & Television</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#" onclick="navigate('shop')">Shop Product</a></li>
+        <li><a href="#" onclick="navigate('cart')">Shopping Cart</a></li>
+        <li><a href="#" onclick="navigate('wishlist')">Wishlist</a></li>
+        <li><a href="#" onclick="navigate('compare')">Compare</a></li>
+        <li><a href="#" onclick="navigate('tracking')">Track Order</a></li>
+        <li><a href="#">Customer Help</a></li>
+        <li><a href="#">About Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Download App</h4>
+      <div class="app-badges">
+        <div class="app-badge">▶ Google Play</div>
+        <div class="app-badge">🍎 App Store</div>
+      </div>
+    </div>
+    <div>
+      <h4>Popular Tag</h4>
+      <div class="footer-tags">
+        <span class="footer-tag">Game</span>
+        <span class="footer-tag">iPhone</span>
+        <span class="footer-tag">TV</span>
+        <span class="footer-tag">Food Lover</span>
+        <span class="footer-tag">MacBook</span>
+        <span class="footer-tag">SSD</span>
+        <span class="footer-tag">Graphics Card</span>
+        <span class="footer-tag">Power Bank</span>
+        <span class="footer-tag">Smart TV</span>
+        <span class="footer-tag">Speaker</span>
+        <span class="footer-tag">Tablet</span>
+        <span class="footer-tag">Microwave</span>
+        <span class="footer-tag">Samsung</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2024 Clicon eCommerce. All Rights Reserved. | Design by Templatemonster
+  </div>
+</footer>
+
+<!-- ====== PRODUCT IMAGES (placeholder svgs) ====== -->
+<script>
+// ──────────────────────────────────────────────
+// DATA
+// ──────────────────────────────────────────────
+const PRODUCTS = [
+  { id:1, name:'Samsung 49-Inch CHG90 144Hz Curved Gaming Monitor', price:999, oldPrice:1230, rating:4.5, reviews:65, category:'TV & Televisions', brand:'Samsung', tags:['TV','Game'], badge:'Sale', img:'🖥️' },
+  { id:2, name:'ASUS FHD Gaming Laptop Core i7, 16GB RAM, 512GB', price:700, oldPrice:900, rating:4, reviews:35, category:'Computer & Laptop', brand:'ASUS', tags:['Laptop'], badge:'', img:'💻' },
+  { id:3, name:'Jabra Elite 85h Wireless Noise-Cancelling Headphones', price:99, oldPrice:135, rating:4.5, reviews:42, category:'Headphone', brand:'Jabra', tags:['iPhone'], badge:'', img:'🎧' },
+  { id:4, name:'Sony WH-1000XM5 Wireless Industry-Leading Headphones', price:349, oldPrice:399, rating:5, reviews:89, category:'Headphone', brand:'Sony', tags:['iPhone'], badge:'New', img:'🎧' },
+  { id:5, name:'Apple iMac 24" M1 8-Core GPU 256GB SSD, Blue', price:1299, oldPrice:1499, rating:5, reviews:120, category:'Computer & Laptop', brand:'Apple', tags:['Laptop'], badge:'', img:'🖥️' },
+  { id:6, name:'Samsung Galaxy S23 Ultra 256GB Phantom Black', price:1199, oldPrice:1399, rating:4.5, reviews:78, category:'SmartPhone', brand:'Samsung', tags:['SmartPhone'], badge:'Sale', img:'📱' },
+  { id:7, name:'Sony Alpha A6400 Mirrorless Camera + 16-50mm Lens', price:899, oldPrice:1050, rating:4.5, reviews:55, category:'Camera & Photo', brand:'Sony', tags:[], badge:'', img:'📷' },
+  { id:8, name:'HP LaserJet Pro M15w Compact Personal Printer', price:189, oldPrice:230, rating:4, reviews:30, category:'Computer Accessories', brand:'HP', tags:[], badge:'', img:'🖨️' },
+  { id:9, name:'Logitech MX Master 3 Advanced Wireless Mouse', price:79, oldPrice:99, rating:4.5, reviews:200, category:'Computer Accessories', brand:'Logitech', tags:[], badge:'', img:'🖱️' },
+  { id:10, name:'Razer BlackWidow V3 Mechanical Gaming Keyboard', price:139, oldPrice:179, rating:5, reviews:310, category:'Computer Accessories', brand:'Razer', tags:['Game'], badge:'', img:'⌨️' },
+  { id:11, name:'Canon EOS R50 Mirrorless Camera Body Only', price:679, oldPrice:799, rating:4, reviews:44, category:'Camera & Photo', brand:'Canon', tags:[], badge:'New', img:'📷' },
+  { id:12, name:'Apple AirPods Pro (2nd Gen) with MagSafe Case', price:249, oldPrice:279, rating:5, reviews:520, category:'Mobile Accessories', brand:'Apple', tags:['iPhone'], badge:'', img:'🎵' },
+  { id:13, name:'Samsung 65" QLED 4K Smart TV 2023', price:1499, oldPrice:1799, rating:4.5, reviews:95, category:'TV & Televisions', brand:'Samsung', tags:['TV','SmartPhone'], badge:'Sale', img:'📺' },
+  { id:14, name:'Dell XPS 15 9530 Intel Core i9 32GB 1TB SSD', price:1999, oldPrice:2299, rating:5, reviews:67, category:'Computer & Laptop', brand:'Dell', tags:['Laptop'], badge:'', img:'💻' },
+  { id:15, name:'Portable Washing Machine 8LB Compact Twin-Tub', price:139, oldPrice:169, rating:4, reviews:21, category:'SmartPhone', brand:'Generic', tags:[], badge:'', img:'🫧' },
+  { id:16, name:'HP Pavilion 24" All-in-One Desktop PC', price:649, oldPrice:799, rating:4, reviews:38, category:'Computer & Laptop', brand:'HP', tags:['Laptop'], badge:'', img:'🖥️' },
+  { id:17, name:'Samsung Galaxy Tab S9 FE 10.9" 128GB WiFi', price:449, oldPrice:499, rating:4.5, reviews:58, category:'SmartPhone', brand:'Samsung', tags:['SmartPhone'], badge:'New', img:'📱' },
+  { id:18, name:'Apple iPhone 15 Pro Max 512GB Natural Titanium', price:1599, oldPrice:1799, rating:5, reviews:300, category:'SmartPhone', brand:'Apple', tags:['iPhone','SmartPhone'], badge:'New', img:'📱' },
+  { id:19, name:'Beats Studio Pro Wireless Headphones – Black', price:349, oldPrice:399, rating:4.5, reviews:74, category:'Headphone', brand:'Beats', tags:[], badge:'', img:'🎧' },
+  { id:20, name:'Google Nest Hub (2nd Gen) Smart Display', price:99, oldPrice:129, rating:4, reviews:47, category:'Smart Home', brand:'Google', tags:[], badge:'', img:'📱' },
+  { id:21, name:'WD 4TB Elements Portable External Hard Drive', price:89, oldPrice:109, rating:4.5, reviews:180, category:'Computer Accessories', brand:'WD', tags:['USB'], badge:'', img:'💾' },
+  { id:22, name:'Logitech C920 HD Pro Webcam 1080p', price:69, oldPrice:89, rating:4.5, reviews:420, category:'Computer Accessories', brand:'Logitech', tags:[], badge:'', img:'📸' },
+  { id:23, name:'iPad Pro 12.9" (6th Gen) M2 Chip 256GB WiFi', price:1099, oldPrice:1299, rating:5, reviews:230, category:'SmartPhone', brand:'Apple', tags:['iPhone'], badge:'', img:'📱' },
+  { id:24, name:'Sony PlayStation 5 Console Disc Version', price:499, oldPrice:549, rating:5, reviews:890, category:'Gaming', brand:'Sony', tags:['Game'], badge:'Sale', img:'🎮' },
+];
+
+let cart = [];
+let wishlist = [
+  { id:1, name:'Jabra Elite 85h Wireless Noise-Cancelling Headphones', price:99, oldPrice:135, inStock:true },
+  { id:2, name:'Portable Atlas 2.1 G/m C5700L-13200 G/m 50Tb Gaming Power', price:1200, oldPrice:1499, inStock:true },
+  { id:3, name:'Portable Hiking Machine, 2-Ton Capacity, Dual-Gear Kit...', price:3728, oldPrice:4199, inStock:true },
+  { id:4, name:'SONY Dual Shock 4 260hz Fan 2ch Channel 2nd Fanfare Gamer...', price:1489, oldPrice:1699, inStock:false },
+];
+let couponDiscount = 0;
+
+// ──────────────────────────────────────────────
+// NAVIGATION
+// ──────────────────────────────────────────────
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+  if (page === 'cart') renderCart();
+  if (page === 'checkout') renderCheckout();
+  if (page === 'wishlist') renderWishlist();
+  if (page === 'shop') renderProducts(currentProducts);
+}
+
+// ──────────────────────────────────────────────
+// PRODUCTS
+// ──────────────────────────────────────────────
+let currentProducts = [...PRODUCTS];
+let currentPage = 1;
+const perPage = 12;
+
+function renderStars(rating) {
+  let s = '';
+  for (let i = 1; i <= 5; i++) s += i <= Math.floor(rating) ? '★' : (i - rating < 1 && i - rating > 0 ? '½' : '☆');
+  return s;
+}
+
+function renderProducts(products) {
+  const grid = document.getElementById('productsGrid');
+  const start = (currentPage - 1) * perPage;
+  const slice = products.slice(start, start + perPage);
+  document.getElementById('resultCount').textContent = `Showing ${start + 1}–${Math.min(start + perPage, products.length)} of ${products.length} results`;
+
+  grid.innerHTML = slice.map(p => `
+    <div class="product-card">
+      ${p.badge ? `<div class="badge-label ${p.badge === 'New' ? 'badge-new' : 'badge-sale'}">${p.badge}</div>` : ''}
+      <div style="height:140px;display:flex;align-items:center;justify-content:center;font-size:64px;background:#f9f9f9;">${p.img}</div>
+      <div class="card-body">
+        <div class="stars">${renderStars(p.rating)} <small>(${p.reviews})</small></div>
+        <div class="card-title">${p.name}</div>
+        <div class="card-price">$${p.price.toFixed(2)} ${p.oldPrice ? `<span class="old-price">$${p.oldPrice}</span>` : ''}</div>
+        <div class="card-actions">
+          <button class="btn btn-orange btn-sm btn-cart" onclick="addToCart('${p.name.replace(/'/g,"\\'")}', ${p.price})">🛒 Add to Cart</button>
+          <button class="btn-wish" onclick="addToWishlist(${p.id})" title="Wishlist">♡</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  renderPagination(products.length);
+}
+
+function renderPagination(total) {
+  const pages = Math.ceil(total / perPage);
+  const pg = document.getElementById('pagination');
+  let html = '';
+  for (let i = 1; i <= pages; i++) {
+    html += `<button onclick="goPage(${i})" style="padding:5px 11px;border:1px solid ${i === currentPage ? 'var(--orange)' : 'var(--border)'};background:${i === currentPage ? 'var(--orange)' : '#fff'};color:${i === currentPage ? '#fff' : 'var(--text)'};border-radius:4px;font-size:13px;">${i}</button>`;
+  }
+  pg.innerHTML = html;
+}
+
+function goPage(n) { currentPage = n; renderProducts(currentProducts); window.scrollTo(0, 0); }
+
+function filterCategory(el, cat) {
+  document.querySelectorAll('#categoryList li').forEach(li => li.classList.remove('active'));
+  el.classList.add('active');
+  currentPage = 1;
+  currentProducts = cat === 'All' ? [...PRODUCTS] : PRODUCTS.filter(p => p.category === cat);
+  renderProducts(currentProducts);
+}
+
+function applyPriceFilter() {
+  const min = parseInt(document.getElementById('priceMin').value) || 0;
+  const max = parseInt(document.getElementById('priceMax').value) || 9999;
+  currentProducts = PRODUCTS.filter(p => p.price >= min && p.price <= max);
+  currentPage = 1;
+  renderProducts(currentProducts);
+}
+
+let selectedBrands = [];
+function updateBrandFilter(cb) {
+  if (cb.checked) selectedBrands.push(cb.value);
+  else selectedBrands = selectedBrands.filter(b => b !== cb.value);
+  currentProducts = selectedBrands.length ? PRODUCTS.filter(p => selectedBrands.includes(p.brand)) : [...PRODUCTS];
+  currentPage = 1;
+  renderProducts(currentProducts);
+}
+
+function filterTag(el, tag) {
+  currentProducts = PRODUCTS.filter(p => p.tags.includes(tag));
+  currentPage = 1;
+  renderProducts(currentProducts);
+}
+
+function sortProducts(val) {
+  if (val === 'price-asc') currentProducts.sort((a,b) => a.price - b.price);
+  else if (val === 'price-desc') currentProducts.sort((a,b) => b.price - a.price);
+  else if (val === 'rating') currentProducts.sort((a,b) => b.rating - a.rating);
+  else currentProducts.sort((a,b) => b.reviews - a.reviews);
+  renderProducts(currentProducts);
+}
+
+function searchProducts() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  currentProducts = q ? PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q)) : [...PRODUCTS];
+  currentPage = 1;
+  navigate('shop');
+}
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') searchProducts(); });
+
+// ──────────────────────────────────────────────
+// CART
+// ──────────────────────────────────────────────
+function addToCart(name, price) {
+  const existing = cart.find(i => i.name === name);
+  if (existing) existing.qty++;
+  else cart.push({ name, price, qty: 1 });
+  updateBadges();
+  showToast('Added to cart: ' + name.substring(0,30) + '…');
+}
+
+function renderCart() {
+  const tbody = document.getElementById('cartBody');
+  if (!cart.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text-muted)">Your cart is empty. <a href="#" onclick="navigate(\'shop\')" style="color:var(--blue)">Continue shopping</a></td></tr>';
+    updateCartTotals();
+    return;
+  }
+  tbody.innerHTML = cart.map((item, i) => `
+    <tr>
+      <td><div class="cart-product"><div style="font-size:36px;width:55px;height:55px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:4px;">${getEmoji(item.name)}</div>
+        <div class="cart-product-name">${item.name.substring(0,50)}…</div></div></td>
+      <td>$${item.price.toFixed(2)}</td>
+      <td><div class="qty-control">
+        <button onclick="changeQty(${i},-1)">−</button>
+        <input type="number" value="${item.qty}" min="1" onchange="setQty(${i},this.value)">
+        <button onclick="changeQty(${i},1)">+</button>
+      </div></td>
+      <td><strong>$${(item.price * item.qty).toFixed(2)}</strong></td>
+      <td><button class="btn-remove" onclick="removeCartItem(${i})">✕</button></td>
+    </tr>
+  `).join('');
+  updateCartTotals();
+}
+
+function changeQty(i, delta) {
+  cart[i].qty = Math.max(1, cart[i].qty + delta);
+  renderCart();
+}
+function setQty(i, val) {
+  cart[i].qty = Math.max(1, parseInt(val) || 1);
+  renderCart();
+}
+function removeCartItem(i) { cart.splice(i, 1); updateBadges(); renderCart(); }
+function updateCart() { renderCart(); showToast('Cart updated!'); }
+
+function updateCartTotals() {
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const disc = couponDiscount;
+  const tax = (sub - disc) * 0.05;
+  const total = sub - disc + tax;
+  document.getElementById('cartSubtotal').textContent = '$' + sub.toFixed(2);
+  document.getElementById('cartDiscount').textContent = '-$' + disc.toFixed(2);
+  document.getElementById('cartTax').textContent = '$' + tax.toFixed(2);
+  document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+}
+
+function applyCoupon() {
+  const code = document.getElementById('couponInput').value.toUpperCase().trim();
+  if (code === 'SAVE10') { couponDiscount = cart.reduce((s,i) => s + i.price*i.qty, 0) * 0.1; showToast('Coupon applied! 10% off'); }
+  else if (code === 'FLAT20') { couponDiscount = 20; showToast('Coupon applied! $20 off'); }
+  else { showToast('Invalid coupon code', true); return; }
+  updateCartTotals();
+}
+
+// ──────────────────────────────────────────────
+// WISHLIST
+// ──────────────────────────────────────────────
+function addToWishlist(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  if (wishlist.find(x => x.id === id)) { showToast('Already in wishlist!', true); return; }
+  wishlist.push({ id: p.id, name: p.name, price: p.price, oldPrice: p.oldPrice, inStock: true });
+  updateBadges();
+  showToast('Added to wishlist!');
+}
+function removeWishItem(i) { wishlist.splice(i, 1); updateBadges(); renderWishlist(); }
+function clearWishlist() { wishlist = []; updateBadges(); renderWishlist(); }
+function moveToCart(i) {
+  const item = wishlist[i];
+  addToCart(item.name, item.price);
+  wishlist.splice(i, 1);
+  updateBadges();
+  renderWishlist();
+}
+
+function renderWishlist() {
+  const tbody = document.getElementById('wishlistBody');
+  if (!wishlist.length) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--text-muted)">Your wishlist is empty.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = wishlist.map((item, i) => `
+    <tr>
+      <td><div class="wishlist-product">
+        <div style="font-size:32px;width:55px;height:55px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:4px;padding:4px;">${getEmoji(item.name)}</div>
+        <div class="wishlist-product-name">${item.name.substring(0,70)}</div>
+      </div></td>
+      <td><span class="price-strike">$${item.oldPrice ? item.oldPrice.toFixed(2) : ''}</span><br><strong style="color:var(--blue)">$${item.price.toFixed(2)}</strong></td>
+      <td><span class="${item.inStock ? 'stock-in' : 'stock-out'}">${item.inStock ? 'IN STOCK' : 'OUT OF STOCK'}</span></td>
+      <td style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        ${item.inStock ? `<button class="btn btn-orange btn-sm" onclick="moveToCart(${i})">🛒 Add to Cart</button>` : `<button class="btn btn-outline btn-sm" disabled style="opacity:0.5">Unavailable</button>`}
+        <button class="btn-remove" onclick="removeWishItem(${i})">✕</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ──────────────────────────────────────────────
+// CHECKOUT
+// ──────────────────────────────────────────────
+function renderCheckout() {
+  const container = document.getElementById('checkoutItems');
+  if (!cart.length) {
+    container.innerHTML = '<p style="color:var(--text-muted);font-size:13px;margin-bottom:12px;">No items in cart. <a href="#" onclick="navigate(\'shop\')" style="color:var(--blue)">Continue shopping</a></p>';
+  } else {
+    container.innerHTML = cart.map(item => `
+      <div class="summary-item">
+        <div style="font-size:30px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:4px;">${getEmoji(item.name)}</div>
+        <div class="summary-item-info">
+          <p>${item.name.substring(0,55)}…</p>
+          <strong>Qty: ${item.qty} × $${item.price.toFixed(2)}</strong>
+        </div>
+      </div>
+    `).join('');
+  }
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const disc = couponDiscount;
+  const tax = (sub - disc) * 0.05;
+  document.getElementById('co-subtotal').textContent = '$' + sub.toFixed(2);
+  document.getElementById('co-discount').textContent = '-$' + disc.toFixed(2);
+  document.getElementById('co-tax').textContent = '$' + tax.toFixed(2);
+  document.getElementById('co-total').textContent = '$' + (sub - disc + tax).toFixed(2);
+}
+
+function selectPayment(el) {
+  document.querySelectorAll('.pay-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('cardFields').style.display = el.querySelector('span').textContent === 'Debit/Credit' ? 'block' : 'none';
+}
+
+function placeOrder() {
+  cart = [];
+  couponDiscount = 0;
+  updateBadges();
+  navigate('success');
+}
+
+// ──────────────────────────────────────────────
+// ORDER TRACKING
+// ──────────────────────────────────────────────
+let orderStep = 1;
+const stepPercents = ['0%','0%','33%','66%','100%'];
+function advanceOrder() {
+  if (orderStep >= 4) { showToast('Order already delivered!'); return; }
+  orderStep++;
+  updateOrderProgress();
+}
+function resetOrder() { orderStep = 1; updateOrderProgress(); }
+function updateOrderProgress() {
+  for (let i = 1; i <= 4; i++) {
+    const s = document.getElementById('step' + i);
+    s.classList.remove('done','active');
+    if (i < orderStep) s.classList.add('done');
+    else if (i === orderStep) s.classList.add('active');
+  }
+  document.getElementById('progressFill').style.width = stepPercents[orderStep];
+}
+updateOrderProgress();
+
+// ──────────────────────────────────────────────
+// COMPARE
+// ──────────────────────────────────────────────
+function clearCompare() { showToast('Compare list cleared!'); }
+
+// ──────────────────────────────────────────────
+// UTILS
+// ──────────────────────────────────────────────
+function updateBadges() {
+  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('cartBadge').textContent = cartCount;
+  document.getElementById('wishBadge').textContent = wishlist.length;
+}
+
+function getEmoji(name) {
+  const n = name.toLowerCase();
+  if (n.includes('headphone') || n.includes('airpod') || n.includes('beats') || n.includes('jabra') || n.includes('wh-')) return '🎧';
+  if (n.includes('laptop') || n.includes('macbook') || n.includes('xps') || n.includes('asus')) return '💻';
+  if (n.includes('imac') || n.includes('monitor') || n.includes('tv') || n.includes('television') || n.includes('display')) return '🖥️';
+  if (n.includes('phone') || n.includes('iphone') || n.includes('galaxy') || n.includes('pixel') || n.includes('tab') || n.includes('ipad')) return '📱';
+  if (n.includes('camera') || n.includes('canon') || n.includes('sony alpha') || n.includes('eos')) return '📷';
+  if (n.includes('keyboard')) return '⌨️';
+  if (n.includes('mouse')) return '🖱️';
+  if (n.includes('printer')) return '🖨️';
+  if (n.includes('gaming') || n.includes('playstation') || n.includes('xbox')) return '🎮';
+  if (n.includes('watch')) return '⌚';
+  if (n.includes('speaker')) return '🔊';
+  return '📦';
+}
+
+let toastTimer;
+function showToast(msg, isError = false) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:8px;color:#fff;font-size:13px;font-weight:600;z-index:9999;transition:opacity 0.3s;max-width:300px;word-break:break-word;box-shadow:0 4px 16px rgba(0,0,0,0.2)';
+    document.body.appendChild(t);
+  }
+  t.style.background = isError ? '#e74c3c' : '#27ae60';
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.style.opacity = '0'; }, 3000);
+}
+
+// ──────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────
+renderProducts(PRODUCTS);
+renderWishlist();
+</script>
+</body>
+</html>
