@@ -1,76 +1,74 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react';
+import TopBar from './components/TopBar';
+import Header from './components/Header';
+import NavBar from './components/NavBar';
+import Breadcrumb from './components/Breadcrumb';
+import Sidebar from './components/Sidebar';
+import Footer from './components/Footer';
+import { RatingModal, AddCardModal } from './components/Modals';
 
-import Home from './pages/Home'
-import AboutUsPage from './pages/AboutUsPage'
-import BlogDetailPage from './pages/BlogDetailPage'
-import BlogListPage from './pages/BlogListPage'
-import CustomerSupportPage from './pages/CustomerSupportPage'
-import EmailVerificationPage from './pages/EmailVerificationPage'
-import FAQsPage from './pages/FAQsPage'
-import ForgetPasswordPage from './pages/ForgetPasswordPage'
-import NotFoundPage from './pages/NotFoundPage'
-import ResetPasswordPage from './pages/ResetPasswordPage'
-import SignInPage from './pages/SignInPage'
-import SignUpPage from './pages/SignUpPage'
+import Dashboard from './pages/Dashboard';
+import OrderHistory from './pages/OrderHistory';
+import OrderDetails from './pages/OrderDetails';
+import CardsAddress from './pages/CardsAddress';
+import BrowsingHistory from './pages/BrowsingHistory';
+import Settings from './pages/Settings';
+import Placeholder from './pages/Placeholder';
 
-import ProductQuickView from './components/ProductQuickView'
+const breadcrumbs = {
+  'dashboard':       ['Home', 'User Account', 'Dashboard'],
+  'order-history':   ['Home', 'User Account', 'Dashboard', 'Order History'],
+  'order-details':   ['Home', 'User Account', 'Dashboard', 'Order History', 'Order Details'],
+  'cards-address':   ['Home', 'User Account', 'Dashboard', 'Cards & Address'],
+  'browsing-history':['Home', 'User Account', 'Dashboard', 'Browsing History'],
+  'settings':        ['Home', 'User Account', 'Dashboard', 'Setting'],
+  'track-order':     ['Home', 'User Account', 'Dashboard', 'Track Order'],
+  'shopping-cart':   ['Home', 'User Account', 'Dashboard', 'Shopping Cart'],
+  'wishlist':        ['Home', 'User Account', 'Dashboard', 'Wishlist'],
+  'compare':         ['Home', 'User Account', 'Dashboard', 'Compare'],
+};
 
 function App() {
-  const [quickViewProduct, setQuickViewProduct] = useState(null)
-  const path = window.location.pathname
+  const [page, setPage] = useState('dashboard');
+  const [showRating, setShowRating] = useState(false);
+  const [showAddCard, setShowAddCard] = useState(false);
 
-  useEffect(() => {
-    const openQuickView = (event) => {
-      setQuickViewProduct(event.detail)
+  const navigate = (p) => setPage(p);
+
+  const renderPage = () => {
+    switch (page) {
+      case 'dashboard':        return <Dashboard navigate={navigate} onAddCard={() => setShowAddCard(true)} />;
+      case 'order-history':    return <OrderHistory navigate={navigate} />;
+      case 'order-details':    return <OrderDetails navigate={navigate} onLeaveRating={() => setShowRating(true)} />;
+      case 'cards-address':    return <CardsAddress />;
+      case 'browsing-history': return <BrowsingHistory />;
+      case 'settings':         return <Settings />;
+      case 'track-order':      return <Placeholder title="Track Order" />;
+      case 'shopping-cart':    return <Placeholder title="Shopping Cart" />;
+      case 'wishlist':         return <Placeholder title="Wishlist" />;
+      case 'compare':          return <Placeholder title="Compare" />;
+      default:                 return <Dashboard navigate={navigate} />;
     }
-
-    window.addEventListener('open-product-quick-view', openQuickView)
-
-    return () => {
-      window.removeEventListener('open-product-quick-view', openQuickView)
-    }
-  }, [])
-
-  let page = <Home />
-
-  if (path === '/') {
-    page = <Home />
-  } else if (path === '/about-us') {
-    page = <AboutUsPage />
-  } else if (path === '/blog') {
-    page = <BlogListPage />
-  } else if (path === '/blog-detail') {
-    page = <BlogDetailPage />
-  } else if (path === '/customer-support') {
-    page = <CustomerSupportPage />
-  } else if (path === '/email-verification') {
-    page = <EmailVerificationPage />
-  } else if (path === '/faqs') {
-    page = <FAQsPage />
-  } else if (path === '/forget-password') {
-    page = <ForgetPasswordPage />
-  } else if (path === '/reset-password') {
-    page = <ResetPasswordPage />
-  } else if (path === '/sign-in') {
-    page = <SignInPage />
-  } else if (path === '/sign-up') {
-    page = <SignUpPage />
-  } else {
-    page = <NotFoundPage />
-  }
+  };
 
   return (
-    <>
-      {page}
+    <div>
+      {showRating   && <RatingModal  onClose={() => setShowRating(false)} />}
+      {showAddCard  && <AddCardModal onClose={() => setShowAddCard(false)} />}
 
-      {quickViewProduct && (
-        <ProductQuickView
-          product={quickViewProduct}
-          onClose={() => setQuickViewProduct(null)}
-        />
-      )}
-    </>
-  )
+      <TopBar />
+      <Header />
+      <NavBar />
+      <Breadcrumb items={breadcrumbs[page] || breadcrumbs['dashboard']} />
+
+      <div className="flex max-w-6xl mx-auto gap-5 px-5 my-5">
+        <Sidebar active={page} navigate={navigate} />
+        <div className="flex-1 min-w-0">{renderPage()}</div>
+      </div>
+
+      <Footer />
+    </div>
+  );
 }
 
-export default App
+export default App;

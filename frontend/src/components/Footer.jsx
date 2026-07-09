@@ -1,152 +1,70 @@
-import { ArrowRight } from 'lucide-react'
-import Container from './Container'
-
-function Footer() {
+const Footer = () => {
+  const tags = ['Game','iPhone','TV','Asus Laptops','Macbook','SSD','Graphics Card','Power Bank','Smart TV','Speaker','Tablet','Microwave','Samsung'];
   return (
-    <footer className="bg-[#191c1f] text-white">
-      <Container className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 sm:gap-12 lg:grid-cols-3 lg:py-[72px] xl:grid-cols-[300px_180px_180px_220px_1fr] xl:gap-[48px]">
+    <div className="bg-[#1a1a1a] text-gray-400 pt-10 pb-5 mt-10">
+      <div className="max-w-6xl mx-auto px-5 grid grid-cols-5 gap-8 mb-8">
+        {/* Brand */}
         <div>
-          <a href="/" className="flex items-center gap-3">
-            <div className="grid h-[48px] w-[48px] place-items-center rounded-full bg-[#fa8232]">
-              <div className="h-[18px] w-[18px] rounded-full border-4 border-[#191c1f]" />
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center">
+              <div className="w-3.5 h-3.5 border-2 border-white rounded-full"></div>
             </div>
-
-            <span className="text-[32px] font-bold text-white">
-              CLICON
-            </span>
-          </a>
-
-          <p className="mt-[24px] text-[14px] text-[#77878f]">
-            Customer Supports:
-          </p>
-
-          <p className="mt-[6px] text-[18px] font-medium text-white">
-            (629) 555-0129
-          </p>
-
-          <p className="mt-[12px] text-[15px] leading-[24px] text-[#adb7bc]">
-            4517 Washington Ave.
-            <br />
-            Manchester, Kentucky 39495
-          </p>
-
-          <p className="mt-[12px] break-all text-[15px] text-white">
-            info@kinbo.com
-          </p>
-        </div>
-
-        <div>
-          <h3 className="text-[16px] font-semibold uppercase text-white">
-            Top Category
-          </h3>
-
-          <div className="mt-[20px] flex flex-col gap-[12px] text-[14px] text-[#929fa5]">
-            <a href="#">Computer & Laptop</a>
-            <a href="#">SmartPhone</a>
-            <a href="#">Headphone</a>
-            <a href="#" className="text-white">
-              Accessories
-            </a>
-            <a href="#">Camera & Photo</a>
-            <a href="#">TV & Homes</a>
-
-            <a
-              href="/"
-              className="mt-[4px] flex items-center gap-2 text-[#ebc80c]"
-            >
-              Browse All Product <ArrowRight size={16} />
-            </a>
+            <span className="text-xl font-bold tracking-widest text-white">CLICON</span>
           </div>
+          <p className="text-xs text-gray-500 mb-1">Customer Supports:</p>
+          <div className="text-orange-500 text-base font-semibold">(629) 555-0129</div>
+          <p className="text-xs mt-2 text-gray-500">4517 Washington Ave.<br/>Manchester, Kentucky 39495</p>
+          <p className="text-xs mt-1 text-gray-500">info@kinbo.com</p>
         </div>
 
+        {/* Top Category */}
         <div>
-          <h3 className="text-[16px] font-semibold uppercase text-white">
-            Quick Links
-          </h3>
-
-          <div className="mt-[20px] flex flex-col gap-[12px] text-[14px] text-[#929fa5]">
-            <a href="/">Shop Product</a>
-            <a href="#">Shopping Cart</a>
-            <a href="#">Wishlist</a>
-            <a href="#">Compare</a>
-            <a href="#">Track Order</a>
-            <a href="/customer-support">Customer Help</a>
-            <a href="/about-us">About Us</a>
-            <a href="/blog">Blog</a>
-            <a href="/faqs">FAQs</a>
-          </div>
+          <h5 className="text-white text-xs font-semibold mb-3 uppercase tracking-wide">Top Category</h5>
+          {['Computer & Laptop','SmartPhone','Headphone','Accessories','Camera & Photo','TV & Homes'].map(c => (
+            <a key={c} href="#" className={`block text-xs mb-2 no-underline hover:text-orange-500 ${c==='Accessories' ? 'text-orange-500' : 'text-gray-400'}`}>{c}</a>
+          ))}
+          <a href="#" className="text-orange-500 text-xs">Browse All Product →</a>
         </div>
 
+        {/* Quick Links */}
         <div>
-          <h3 className="text-[16px] font-semibold uppercase text-white">
-            Download App
-          </h3>
+          <h5 className="text-white text-xs font-semibold mb-3 uppercase tracking-wide">Quick Links</h5>
+          {['Shop Product','Shoping Cart','Wishlist','Compare','Track Order','Customer Help','About Us'].map(l => (
+            <a key={l} href="#" className="block text-xs mb-2 no-underline text-gray-400 hover:text-orange-500">{l}</a>
+          ))}
+        </div>
 
-          <div className="mt-[20px] flex flex-col gap-[12px]">
-            <div className="flex h-[69px] w-full max-w-[176px] items-center gap-3 bg-[#303639] px-[20px]">
-              <span className="text-[28px]">▶</span>
-
+        {/* Download App */}
+        <div>
+          <h5 className="text-white text-xs font-semibold mb-3 uppercase tracking-wide">Download App</h5>
+          {[{icon:'fa-google-play',label:'Google Play'},{icon:'fa-apple',label:'App Store'}].map(a => (
+            <div key={a.label} className="flex items-center gap-2.5 bg-[#2a2a2a] rounded-md p-2 mb-2 cursor-pointer">
+              <i className={`fab ${a.icon} text-2xl text-gray-400`}></i>
               <div>
-                <p className="text-[11px] text-white">Get it now</p>
-
-                <p className="text-[14px] font-semibold text-white">
-                  Google Play
-                </p>
+                <div className="text-[9px] text-gray-400">Get it now</div>
+                <div className="text-xs font-semibold text-white">{a.label}</div>
               </div>
             </div>
-
-            <div className="flex h-[69px] w-full max-w-[176px] items-center gap-3 bg-[#303639] px-[20px]">
-              <span className="text-[28px]"></span>
-
-              <div>
-                <p className="text-[11px] text-white">Get it now</p>
-
-                <p className="text-[14px] font-semibold text-white">
-                  App Store
-                </p>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
-        <div className="sm:col-span-2 lg:col-span-1">
-          <h3 className="text-[16px] font-semibold uppercase text-white">
-            Popular Tag
-          </h3>
-
-          <div className="mt-[20px] flex flex-wrap gap-[8px]">
-            {[
-              'Game',
-              'iPhone',
-              'TV',
-              'Asus Laptops',
-              'Macbook',
-              'SSD',
-              'Graphics Card',
-              'Power Bank',
-              'Smart TV',
-              'Speaker',
-              'Tablet',
-              'Microwave',
-              'Samsung',
-            ].map((tag) => (
-              <a
-                key={tag}
-                href="#"
-                className="border border-[#303639] px-[12px] py-[6px] text-[14px] text-white"
-              >
-                {tag}
-              </a>
+        {/* Popular Tags */}
+        <div>
+          <h5 className="text-white text-xs font-semibold mb-3 uppercase tracking-wide">Popular Tag</h5>
+          <div className="flex flex-wrap gap-2">
+            {tags.map(t => (
+              <span key={t} className={`border text-[11px] px-2 py-1 rounded cursor-pointer hover:border-orange-500 hover:text-orange-500 transition-colors
+                ${t === 'Graphics Card' ? 'border-orange-500 text-orange-500' : 'border-gray-600 text-gray-400'}`}>
+                {t}
+              </span>
             ))}
           </div>
         </div>
-      </Container>
-
-      <div className="border-t border-[#303639] px-4 py-[24px] text-center text-[13px] leading-6 text-[#adb7bc] sm:text-[14px]">
-        Kinbo - eCommerce Template © 2021. Design by Templatecookie
       </div>
-    </footer>
-  )
-}
-
-export default Footer
+      <div className="text-center border-t border-gray-800 pt-4 text-xs text-gray-600 max-w-6xl mx-auto">
+        Kinbo eCommerce Template © 2021. Design by Templatecookie
+      </div>
+    </div>
+  );
+};
+export default Footer;
