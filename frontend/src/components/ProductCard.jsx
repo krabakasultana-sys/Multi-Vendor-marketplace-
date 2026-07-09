@@ -1,42 +1,102 @@
-const badgeColors = {
-  'HOT':        'bg-orange-500',
-  'BEST DEALS': 'bg-blue-700',
-  'SALE':       'bg-green-600',
-  'SOLD OUT':   'bg-gray-400',
-  '25% OFF':    'bg-yellow-500',
-};
+import { Eye, Heart, ShoppingCart, Star } from 'lucide-react'
 
-const ProductCard = ({ product }) => (
-  <div className="bg-white rounded-md p-3 relative cursor-pointer hover:shadow-md transition-shadow">
-    {product.badge && (
-      <span className={`absolute top-2 left-2 ${badgeColors[product.badge]} text-white text-[10px] font-semibold px-2 py-0.5 rounded`}>
-        {product.badge}
-      </span>
-    )}
+function ProductCard({ product, imageHeight = 188, className = '' }) {
+  const openQuickView = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
 
-    <img
-      src={product.image}
-      alt={product.name}
-      className="w-full h-24 object-contain mb-2"
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = 'https://placehold.co/150x100?text=No+Image';
-      }}
-    />
+    window.dispatchEvent(
+      new CustomEvent('open-product-quick-view', {
+        detail: product,
+      })
+    )
+  }
 
-    <div className="text-orange-400 text-xs">
-      {'★'.repeat(Math.floor(product.rating))}
-      {'☆'.repeat(5 - Math.floor(product.rating))}
-    </div>
-    <span className="text-[10px] text-gray-400 ml-1">({product.reviews})</span>
-    <div className="text-xs text-gray-600 mt-1 leading-snug">{product.name}</div>
-    <div className="flex gap-2 items-center mt-1">
-      {product.oldPrice && (
-        <span className="text-[11px] text-gray-400 line-through">{product.oldPrice}</span>
+  return (
+    <article
+      className={`group relative min-w-0 border border-[#e4e7e9] bg-white p-3 sm:p-4 ${className}`}
+    >
+      {product.badge && (
+        <span
+          className={`absolute left-3 top-3 z-10 px-2.5 py-1 text-[11px] font-semibold uppercase sm:left-4 sm:top-4 sm:text-[12px] ${
+            product.badgeClass || 'bg-[#efd33d] text-[#191c1f]'
+          }`}
+        >
+          {product.badge}
+        </span>
       )}
-      <span className="text-orange-500 font-semibold text-xs">{product.price}</span>
-    </div>
-  </div>
-);
 
-export default ProductCard;
+      <div
+        className="relative grid place-items-center overflow-hidden bg-white"
+        style={{ height: `clamp(140px, 20vw, ${imageHeight}px)` }}
+      >
+        <img
+          src={product.image}
+          alt={product.name}
+          className="max-h-full max-w-full object-contain"
+        />
+
+        <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/0 opacity-0 transition group-hover:bg-black/20 group-hover:opacity-100 group-focus-within:bg-black/20 group-focus-within:opacity-100">
+          <button
+            type="button"
+            className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#191c1f] sm:h-12 sm:w-12"
+            aria-label="Add to wishlist"
+          >
+            <Heart size={20} />
+          </button>
+
+          <button
+            type="button"
+            className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#191c1f] sm:h-12 sm:w-12"
+            aria-label="Add to cart"
+          >
+            <ShoppingCart size={20} />
+          </button>
+
+          <button
+            type="button"
+            onClick={openQuickView}
+            className="grid h-10 w-10 place-items-center rounded-full bg-[#fa8232] text-white sm:h-12 sm:w-12"
+            aria-label="Quick view"
+          >
+            <Eye size={20} />
+          </button>
+        </div>
+      </div>
+
+      {product.rating ? (
+        <div className="mt-3 flex items-center gap-0.5">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <Star
+              key={index}
+              size={14}
+              className="fill-[#fa8232] text-[#fa8232]"
+            />
+          ))}
+
+          <span className="ml-1 text-[12px] text-[#77878f]">
+            ({product.rating})
+          </span>
+        </div>
+      ) : null}
+
+      <h3 className="mt-2 min-h-[40px] overflow-hidden text-[13px] leading-5 text-[#191c1f] sm:text-[14px]">
+        {product.name}
+      </h3>
+
+      <div className="mt-2 flex flex-wrap items-center gap-1">
+        {product.oldPrice && (
+          <span className="text-[13px] text-[#929fa5] line-through sm:text-[14px]">
+            {product.oldPrice}
+          </span>
+        )}
+
+        <span className="text-[13px] font-semibold text-[#2da5f3] sm:text-[14px]">
+          {product.price}
+        </span>
+      </div>
+    </article>
+  )
+}
+
+export default ProductCard
