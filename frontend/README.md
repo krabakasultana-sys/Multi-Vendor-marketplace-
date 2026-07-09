@@ -1,23 +1,16 @@
-# Clicon eCommerce Dashboard
+# React + Vite
 
-React + Tailwind CSS project
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Setup
+Currently, two official plugins are available:
 
-1. Install Node.js from https://nodejs.org (LTS version)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-2. Open terminal in this folder and run:
-```
-npm install
-npm start
-```
+## React Compiler
 
-3. Browser automatically opens at http://localhost:3000
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Pages
-- Dashboard
-- Order History
-- Order Details (with Rating modal)
-- Cards & Address (with Add Card modal)
-- Browsing History
-- Settings
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
