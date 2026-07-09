@@ -1,38 +1,44 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const connectDB = require('./config/db');
-const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
 
-dotenv.config();
-connectDB();
+import { connectDB } from './config/db.js'
 
-const app = express();
+import authRoutes from './routes/authRoutes.js'
+import productRoutes from './routes/productRoutes.js'
+import blogRoutes from './routes/blogRoutes.js'
+import messageRoutes from './routes/messageRoutes.js'
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+dotenv.config()
 
-// Static folder for uploaded images
-app.use('/uploads', express.static('uploads'));
+connectDB()
 
-// Routes
-app.use('/api/users',      require('./routes/userRoutes'));
-app.use('/api/products',   require('./routes/productRoutes'));
-app.use('/api/categories', require('./routes/categoryRoutes'));
-app.use('/api/cart',       require('./routes/cartRoutes'));
-app.use('/api/orders',     require('./routes/orderRoutes'));
+const app = express()
 
-// Health check
+app.use(cors())
+app.use(express.json())
+
 app.get('/', (req, res) => {
-  res.json({ message: 'Clicon API is running...' });
-});
+  res.json({
+    success: true,
+    message: 'Clicon real backend server is running',
+  })
+})
 
-// Error Middleware
-app.use(notFound);
-app.use(errorHandler);
+app.get('/api/health', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Backend health check successful',
+  })
+})
 
-const PORT = process.env.PORT || 5000;
+app.use('/api/auth', authRoutes)
+app.use('/api/products', productRoutes)
+app.use('/api/blogs', blogRoutes)
+app.use('/api/messages', messageRoutes)
+
+const PORT = process.env.PORT || 5000
+
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  console.log(`Backend running on http://localhost:${PORT}`)
+})
