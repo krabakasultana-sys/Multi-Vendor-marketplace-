@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+/* Custom colors used by the Shop/Cart/Wishlist/Compare pages merged in
+   from Rabaka's branch (bg-primary, text-accent, etc.) */
+@theme {
+  --color-primary: #0d6efd;
+  --color-primary-light: #3d8bfd;
+  --color-primary-dark: #0353c4;
+  --color-accent: #fa8232;
+  --color-accent-dark: #e0701f;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    width: 100%;
+    min-height: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body,
+  #root {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+
+  body {
+    overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #191c1f;
+  }
+
+  img,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+/* From Rabaka's branch - used on the Shop/ProductDetail star ratings */
+.star-rating {
+  color: #ffad33;
+}
