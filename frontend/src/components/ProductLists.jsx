@@ -8,7 +8,7 @@ function ProductLists() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const data = await apiRequest('/api/products')
+        cconst data = await apiRequest('/products')
 
         const formattedProducts = data.products.map((product) => ({
           ...product,
