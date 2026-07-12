@@ -16,7 +16,7 @@ async function request(path, options = {}) {
   // Attach the login token (set by SignInPage/SignUpPage) so admin-only
   // product routes on the merged backend (create/update/delete) work too.
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
