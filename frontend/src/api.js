@@ -1,5 +1,5 @@
 // Base URL of the backend API. Set VITE_API_URL in a .env file for production.
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 // Every visitor gets a random "session id" stored in localStorage so their
 // cart/wishlist persist across page reloads without needing a login system.
