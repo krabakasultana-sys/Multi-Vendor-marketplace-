@@ -18,7 +18,7 @@ function TodayBestDeals() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const data = await apiRequest('/api/products')
+        const data = await apiRequest('/products')
 
         const formattedProducts = data.products.map((product) => ({
           ...product,
